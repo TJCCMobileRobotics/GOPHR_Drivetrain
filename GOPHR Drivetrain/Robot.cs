@@ -132,6 +132,11 @@ namespace GOPHR_Drivetrain
                             Debug.Print("Waypoint " + (i + 1) +  " reached");
                             Thread.Sleep(500);
                             i = i + 1;
+                            if (HW.myGamepad.GetButton(3) == true)
+                            {
+                                Debug.Print("Pathing cancelled");
+                                break;
+                            }
                         }
 
                         Debug.Print("Pathing Complete!");
