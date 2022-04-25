@@ -187,7 +187,7 @@ namespace GOPHR_Drivetrain
             Var.axis1 = (float)newaxis1;
 
             /*Set Vx and Vy Chassis targets using axis inputs and scale by finding hypot, max, min, and scaling by max speed setting*/
-            if(System.Math.Abs(Var.axis0) < 0.05 && System.Math.Abs(Var.axis1) < 0.05)
+            if(System.Math.Abs(Var.axis0) < 0.1 && System.Math.Abs(Var.axis1) < 0.1)
             {
                 VxTarget = 0;
                 VyTarget = 0;

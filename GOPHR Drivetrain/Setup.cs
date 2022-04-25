@@ -260,7 +260,7 @@ namespace GOPHR_Drivetrain
             }
             else
             {
-                if (System.Math.Abs(targetAngle - currentAngle) < System.Math.Abs(targetAngle - turnRamp))
+                if (System.Math.Abs(targetAngle - currentAngle) <= turnRamp)
                 {
                     output = System.Math.Sign(targetAngle - initialAngle) * 0.2f + ((targetAngle - currentAngle) * 0.8f / (turnRamp));
                     //Debug.Print("Ramping down");

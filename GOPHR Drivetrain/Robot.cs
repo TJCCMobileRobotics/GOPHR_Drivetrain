@@ -109,7 +109,7 @@ namespace GOPHR_Drivetrain
                     //Comms.UartReadWaypoints();
 
                     /*Use this to hardcode waypoints:*/
-                    float[]testArray = {0, 3, 0, 3, 3, 0};
+                    float[]testArray = {0, 3, 0, 3, 3, 0, 3, 6, 180};
                     Var.waypointArray = testArray;
 
                     while (true)
