@@ -456,8 +456,6 @@ namespace GOPHR_Drivetrain
 
             Thread.Sleep(250);
 
-            Debug.Print("Waypoint Reached");
-
             Var.xCurrent = xTarget;
             Var.yCurrent = yTarget;
             Var.omegaCurrent = omegaTarget;

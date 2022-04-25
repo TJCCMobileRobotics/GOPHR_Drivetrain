@@ -178,6 +178,11 @@ namespace GOPHR_Drivetrain
             return (float)(ticks * (3.65 * System.Math.PI) / (12 * 8.14 * 2048));
         }
 
+        public static float MetersToFeet(float meters)
+        {
+            return (float) meters * 3.28084f;
+        }
+
     }
 
     public static class Controllers
@@ -312,6 +317,8 @@ namespace GOPHR_Drivetrain
         public static float vOmegaOdom;
 
         public static float pathProgress;
+
+        public static float[] waypointArray = new float[60];
     }
 }
 

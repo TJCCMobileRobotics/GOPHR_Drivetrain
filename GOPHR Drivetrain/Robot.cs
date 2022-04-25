@@ -94,9 +94,11 @@ namespace GOPHR_Drivetrain
                 /*Use A Button to Enter Auto Mode*/
                 else if (HW.myGamepad.GetButton(2) == true)
                 {
-                    Debug.Print("Auto Mode Enabled");
 
-                    //Comms.UartReadWaypoints();
+                    Comms._uart.Open();
+                    Debug.Print("Auto mode enabled, waiting for waypoints...");
+
+                    Comms.UartReadWaypoints();
 
                     while (true)
                     {
@@ -108,32 +110,24 @@ namespace GOPHR_Drivetrain
                             CTRE.Phoenix.Watchdog.Feed();
                         }
 
-                        Kinematics.WaypointTracker(0, 10, 0);
+                        Debug.Print("Following Path...");
 
-                        Thread.Sleep(250);
+                        int i = 0;
 
-                        Kinematics.WaypointTracker(10, 10, 180);
+                        while (i < Var.waypointArray.Length / 3)
+                        {
+                            Kinematics.WaypointTracker(Var.waypointArray[i*3+0], Var.waypointArray[i * 3 + 1], Var.waypointArray[i * 3 + 2]);
+                            Debug.Print("Waypoint " + (i + 1) +  " reached");
+                            Thread.Sleep(500);
+                        }
 
-                        Thread.Sleep(250);
-
-                        Kinematics.WaypointTracker(10, 5, 0);
-
-                        Thread.Sleep(250);
-
-                        Kinematics.WaypointTracker(10, 10, 0);
-
-                        Thread.Sleep(250);
-//
-                        Kinematics.WaypointTracker(0, 10, 180);
-
-                        Thread.Sleep(250);
-
-                        Kinematics.WaypointTracker(0, 0, 0);
+                        Debug.Print("Pathing Complete!");
 
                         while (true)
                         {   /*Use B Button to Exit Auto Mode*/
                             if (HW.myGamepad.GetButton(3) == true)
                             {
+                                Comms._uart.Close();
                                 break;
                             }
                         }
@@ -144,20 +138,6 @@ namespace GOPHR_Drivetrain
                 Debug.Print("Select Robot Mode");
 
                 Thread.Sleep(1000);
-
-                //Kinematics.WaypointTracker(0, 10, 0);
-
-                //Var.currentAngle = HW.pigeon.GetFusedHeading();
-
-                //float pidOutput = Controllers.TurnPidController(Var.currentAngle, Var.targetAngle, 0.1, 0.001, 0);
-
-                //Kinematics.SetModuleStatesAuto(0, 0, pidOutput);
-
-                //steer.Steer();
-
-                //Drive.Velocity();
-
-
             }
         }
     }

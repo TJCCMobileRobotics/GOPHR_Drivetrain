@@ -36,13 +36,69 @@ namespace GOPHR_Drivetrain
 
         public static void UartReadWaypoints()
         {
-            bytesInBuffer = _uart.BytesToRead;
+            byte[] numWaypointsByte = new byte[2];
+            char[] numWaypointsChars;
+            int numWaypoints = 0;
 
-            if (bytesInBuffer > 0)
+            int i = 0;
+
+            while (true)
             {
-                byteRead = Comms._uart.ReadByte();
+                bytesInBuffer = _uart.BytesToRead;
+                //Debug.Print("Bytes in Buffer: " + bytesInBuffer);
+
+                if (bytesInBuffer > 0)
+                {
+                    byteRead = Comms._uart.Read(numWaypointsByte, 0, bytesInBuffer);
+                    numWaypointsChars = System.Text.Encoding.UTF8.GetChars(numWaypointsByte);
+                    string numWaypointsString = new string(numWaypointsChars);
+                    numWaypoints = int.Parse(numWaypointsString);
+                    Debug.Print("Number Waypoints: " + numWaypoints);
+                    break;
+                }
+
+                Thread.Sleep(1000);
             }
 
+            Var.waypointArray = new float[3 * numWaypoints];
+
+            Comms._uart.DiscardInBuffer();
+
+            while (i < (numWaypoints * 3))
+            {
+                Comms._uart.WriteByte(1);
+                byte[] waypointByte = new byte[40];
+                char[] waypointChars;
+
+                bytesInBuffer = _uart.BytesToRead;
+
+                if (bytesInBuffer > 0)
+                {
+                    Comms._uart.DiscardOutBuffer();
+                    Comms._uart.WriteByte(0);
+                    byteRead = Comms._uart.Read(waypointByte, 0, bytesInBuffer);
+                    waypointChars = System.Text.Encoding.UTF8.GetChars(waypointByte);
+                    string waypointString = new string(waypointChars);
+                    int waypointInt = int.Parse(waypointString);
+                    float waypointFloat = (float)waypointInt / 1000000;
+                    Var.waypointArray[i] = waypointFloat;
+                    i = i + 1;
+                }             
+                Thread.Sleep(100);
+            }
+            i = 0;
+            Debug.Print("Waypoint Fully Received");
+
+            while (i < numWaypoints)
+            {
+                Debug.Print("X Coordinate: " + Var.waypointArray[i * 3 + 0]);
+                Var.waypointArray[i * 3 + 0] = Config.MetersToFeet(Var.waypointArray[i * 3 + 0]);
+                Debug.Print("Y Coordinate: " + Var.waypointArray[i * 3 + 1]);
+                Var.waypointArray[i * 3 + 1] = Config.MetersToFeet(Var.waypointArray[i * 3 + 1]);
+                Debug.Print("Omega Rotation: " + Var.waypointArray[i * 3 + 2]);
+                i = i + 1;
+            }
+            Debug.Print(Var.waypointArray.Length / 3 + "waypoints recieved"); 
         }
 
         public static void UartWriteOdom()
