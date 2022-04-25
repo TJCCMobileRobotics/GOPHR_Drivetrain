@@ -243,19 +243,19 @@ namespace GOPHR_Drivetrain
                     }
                 }
                 output = (kP * curError + kI * totalError + kD * velError);
-                Debug.Print("PID Output: " + output);
+                //Debug.Print("PID Output: " + output);
             }
             else if ((currentAngle - initialAngle) / (targetAngle - initialAngle) <= 0.5)
             {
                 if (System.Math.Abs(currentAngle - initialAngle) <= turnRamp)
                 {
                     output = System.Math.Sign(targetAngle - initialAngle) * 0.2f + (float)System.Math.Abs((currentAngle - initialAngle) * 0.8f / turnRamp) * System.Math.Sign(targetAngle - initialAngle);
-                    Debug.Print("Ramping up");
+                    //Debug.Print("Ramping up");
                 }
                 else
                 {
                     output = System.Math.Sign(targetAngle - initialAngle) * 1;
-                    Debug.Print("Cruise under half");
+                    //Debug.Print("Cruise under half");
                 }
             }
             else
@@ -263,16 +263,16 @@ namespace GOPHR_Drivetrain
                 if (System.Math.Abs(targetAngle - currentAngle) < System.Math.Abs(targetAngle - turnRamp))
                 {
                     output = System.Math.Sign(targetAngle - initialAngle) * 0.2f + ((targetAngle - currentAngle) * 0.8f / (turnRamp));
-                    Debug.Print("Ramping down");
+                    //Debug.Print("Ramping down");
                 }
                 else
                 {
                     output = System.Math.Sign(targetAngle - initialAngle) * 1;
-                    Debug.Print("cruise over half");
+                    //Debug.Print("cruise over half");
                 }
             }
             /*Return PID control value*/
-            Debug.Print("Ramping Output: " + output);
+            //Debug.Print("Ramping Output: " + output);
             return -output;
         }
     }

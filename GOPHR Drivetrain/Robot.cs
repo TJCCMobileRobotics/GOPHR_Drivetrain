@@ -21,6 +21,10 @@ namespace GOPHR_Drivetrain
             Var.yCurrent = 0;
             Var.omegaCurrent = 0;
 
+            Debug.Print("Select Robot Mode");
+            Debug.Print("Hold A for Autonomous");
+            Debug.Print("Hold X for Teleoperated");
+
             /*Begin main loop*/
             while (true)
             {
@@ -32,7 +36,7 @@ namespace GOPHR_Drivetrain
                 /*Use X Button to Enter Teleop Mode*/
                 if (HW.myGamepad.GetButton(1) == true)
                 {
-                    Debug.Print("Teleop Mode Enabled");
+                    Debug.Print("Teleoperated mode enabled, hold B to return to selection.");
                     /*Initialize current angle as desired heading for angle holding purposes*/
                     Var.currentAngle = HW.pigeon.GetFusedHeading();
                     Var.targetAngle = Var.currentAngle;
@@ -45,7 +49,7 @@ namespace GOPHR_Drivetrain
                         /*Get UART Comms*/
                         obsWatchdog = Comms.UartReadObsWatchdog();                        
 
-                        Debug.Print("obswatchdog: " + obsWatchdog);
+                        //Debug.Print("obswatchdog: " + obsWatchdog);
 
                         if (HW.myGamepad.GetButton(7) == true && HW.myGamepad.GetButton(5) == true)
                         {
@@ -86,6 +90,9 @@ namespace GOPHR_Drivetrain
                         if (HW.myGamepad.GetButton(3) == true)
                         {
                             Comms._uart.Close();
+                            Debug.Print("Select Robot Mode");
+                            Debug.Print("Hold A for Autonomous");
+                            Debug.Print("Hold X for Teleoperated");
                             break;
                         }
                     }
@@ -98,7 +105,12 @@ namespace GOPHR_Drivetrain
                     Comms._uart.Open();
                     Debug.Print("Auto mode enabled, waiting for waypoints...");
 
-                    Comms.UartReadWaypoints();
+                    /*Use this to receive waypoints from pi:*/
+                    //Comms.UartReadWaypoints();
+
+                    /*Use this to hardcode waypoints:*/
+                    float[]testArray = {0, 3, 0, 3, 3, 0};
+                    Var.waypointArray = testArray;
 
                     while (true)
                     {
@@ -116,26 +128,29 @@ namespace GOPHR_Drivetrain
 
                         while (i < Var.waypointArray.Length / 3)
                         {
-                            Kinematics.WaypointTracker(Var.waypointArray[i*3+0], Var.waypointArray[i * 3 + 1], Var.waypointArray[i * 3 + 2]);
+                            Kinematics.WaypointTracker(Var.waypointArray[i * 3 + 0], Var.waypointArray[i * 3 + 1], Var.waypointArray[i * 3 + 2]);
                             Debug.Print("Waypoint " + (i + 1) +  " reached");
                             Thread.Sleep(500);
+                            i = i + 1;
                         }
 
                         Debug.Print("Pathing Complete!");
+                        Debug.Print("Hold B to return to mode selection.");
 
                         while (true)
                         {   /*Use B Button to Exit Auto Mode*/
                             if (HW.myGamepad.GetButton(3) == true)
                             {
                                 Comms._uart.Close();
+                                Debug.Print("Select Robot Mode");
+                                Debug.Print("Hold A for Autonomous");
+                                Debug.Print("Hold X for Teleoperated");
                                 break;
                             }
                         }
                         break;
                     }
                 }
-
-                Debug.Print("Select Robot Mode");
 
                 Thread.Sleep(1000);
             }

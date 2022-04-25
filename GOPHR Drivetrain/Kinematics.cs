@@ -277,7 +277,7 @@ namespace GOPHR_Drivetrain
             VyTarget *= Var.maxSpeed;
             Var.omegaTarget = omegaTarget * Var.maxSpeed * 0.1f;
 
-            Debug.Print("omega Target: " + Var.omegaTarget);
+            //Debug.Print("omega Target: " + Var.omegaTarget);
 
             if (Var.omegaTarget > 1000)
             {
@@ -382,9 +382,9 @@ namespace GOPHR_Drivetrain
             while (System.Math.Abs(Var.currentAngle - Var.targetAngle) > 0.1)
             {
                 Var.currentAngle = HW.pigeon.GetFusedHeading();
-                Debug.Print("initial angle: " + initialAngle);
-                Debug.Print("target angle: " + Var.targetAngle);
-                Debug.Print("current angle: " + Var.currentAngle);
+                //Debug.Print("initial angle: " + initialAngle);
+                //Debug.Print("target angle: " + Var.targetAngle);
+                //Debug.Print("current angle: " + Var.currentAngle);
                 float pidOutput = (float)Controllers.TurnPidController(initialAngle, Var.currentAngle, Var.targetAngle, 0.1f, 0.001f, 0f);
                 Kinematics.SetModuleStatesAuto(0, 0, pidOutput);
                 steer.Steer();
@@ -440,9 +440,9 @@ namespace GOPHR_Drivetrain
             while (System.Math.Abs(Var.currentAngle - Var.targetAngle) > 0.1)
             {
                 Var.currentAngle = HW.pigeon.GetFusedHeading();
-                Debug.Print("initial angle: " + initialAngle);
-                Debug.Print("target angle: " + Var.targetAngle);
-                Debug.Print("current angle: " + Var.currentAngle);
+                //Debug.Print("initial angle: " + initialAngle);
+                //Debug.Print("target angle: " + Var.targetAngle);
+                //Debug.Print("current angle: " + Var.currentAngle);
                 float pidOutput = (float)Controllers.TurnPidController(initialAngle, Var.currentAngle, Var.targetAngle, 0.1f, 0.001f, 0f);
                 Kinematics.SetModuleStatesAuto(0, 0, pidOutput);
                 steer.Steer();
