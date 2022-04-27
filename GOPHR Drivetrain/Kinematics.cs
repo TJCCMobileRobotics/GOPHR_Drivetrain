@@ -16,9 +16,9 @@ namespace GOPHR_Drivetrain
     public static class Kinematics
     {
 
-        private static float VxActual;
-        private static float VyActual;
-        private static float omegaActual;
+        //private static float VxActual;
+        //private static float VyActual;
+        //private static float omegaActual;
 
         private static float VxTarget;
         private static float VyTarget;
@@ -386,6 +386,7 @@ namespace GOPHR_Drivetrain
 
             while (System.Math.Abs(Var.currentAngle - Var.targetAngle) > 0.1)
             {
+                Comms._uart.WriteByte(2);
                 Var.currentAngle = HW.pigeon.GetFusedHeading();
                 //Debug.Print("initial angle: " + initialAngle);
                 //Debug.Print("target angle: " + Var.targetAngle);
@@ -416,6 +417,7 @@ namespace GOPHR_Drivetrain
 
             while (Var.pathProgress < 1)
             {
+                Comms._uart.WriteByte(2);
                 distanceTraveled = HW.talon01.GetSelectedSensorPosition();
                 Var.pathProgress = distanceTraveled / distanceTicks;
                 velocity = Drive.Trapezoid(distanceTicks, distanceTraveled);
@@ -424,7 +426,9 @@ namespace GOPHR_Drivetrain
                 steer.Steer();
                 Drive.Velocity();
 
-                if (HW.myGamepad.GetConnectionStatus() == CTRE.Phoenix.UsbDeviceConnection.Connected)
+                int obsWatchdog = Comms.UartReadObsWatchdog();
+
+                if (HW.myGamepad.GetConnectionStatus() == CTRE.Phoenix.UsbDeviceConnection.Connected && obsWatchdog == 49)
                 {
                     CTRE.Phoenix.Watchdog.Feed();
                 }
@@ -449,6 +453,7 @@ namespace GOPHR_Drivetrain
 
             while (System.Math.Abs(Var.currentAngle - Var.targetAngle) > 0.1)
             {
+                Comms._uart.WriteByte(2);
                 Var.currentAngle = HW.pigeon.GetFusedHeading();
                 //Debug.Print("initial angle: " + initialAngle);
                 //Debug.Print("target angle: " + Var.targetAngle);

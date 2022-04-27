@@ -106,11 +106,11 @@ namespace GOPHR_Drivetrain
                     Debug.Print("Auto mode enabled, waiting for waypoints...");
 
                     /*Use this to receive waypoints from pi:*/
-                    //Comms.UartReadWaypoints();
+                    Comms.UartReadWaypoints();
 
                     /*Use this to hardcode waypoints:*/
-                    float[]testArray = {0, 3, 0, 3, 3, 0, 3, 6, 180};
-                    Var.waypointArray = testArray;
+                    //float[]testArray = {3, 0, 0, 3, 3, 0};
+                    //Var.waypointArray = testArray;
 
                     while (true)
                     {
@@ -128,7 +128,7 @@ namespace GOPHR_Drivetrain
 
                         while (i < Var.waypointArray.Length / 3)
                         {
-                            Kinematics.WaypointTracker(Var.waypointArray[i * 3 + 0], Var.waypointArray[i * 3 + 1], Var.waypointArray[i * 3 + 2]);
+                            Kinematics.WaypointTracker(-Var.waypointArray[i * 3 + 1], Var.waypointArray[i * 3 + 0], Var.waypointArray[i * 3 + 2]);
                             Debug.Print("Waypoint " + (i + 1) +  " reached");
                             Thread.Sleep(500);
                             i = i + 1;
@@ -139,11 +139,94 @@ namespace GOPHR_Drivetrain
                             }
                         }
 
+                        int t = 0;
+
+                        Comms._uart.DiscardOutBuffer();
+
+                        Thread.Sleep(1000);
+
+                        Comms._uart.DiscardOutBuffer();
+
+                        while (t < 1000)
+                        {
+                            Comms._uart.WriteByte(3);
+                            t = t + 1;
+                        }
+                        
+
+                        Thread.Sleep(1000);
+
+                        Debug.Print("Endpoint reached");
+
+                        Comms._uart.DiscardInBuffer();
+
+                        while (true)
+                        {
+                            Comms._uart.WriteByte(3);
+                            byte[] goByte = new byte[1];
+                            
+                            int bytesInBuffer = Comms._uart.BytesToRead;
+                            Debug.Print("Bytes in Buffer: " + bytesInBuffer);
+
+                            if (bytesInBuffer > 0)
+                            {
+                                Comms._uart.Read(goByte, 0, 1);
+                                char[] goChar = System.Text.Encoding.UTF8.GetChars(goByte);
+                                string goString = new string(goChar);
+                                int goInt = int.Parse(goString);
+                                Debug.Print("" + goInt);
+                                if (goInt == 1)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+
+                        i = i - 2;
+
+                        Debug.Print("Returning home...");
+
+                        while (i >= 0)
+                        {
+                            Kinematics.WaypointTracker(-Var.waypointArray[i * 3 + 1], Var.waypointArray[i * 3 + 0], Var.waypointArray[i * 3 + 2]);
+                            Debug.Print("Waypoint " + (i + 1) + " reached");
+                            Thread.Sleep(500);
+                            i = i - 1;
+                            if (HW.myGamepad.GetButton(3) == true)
+                            {
+                                Debug.Print("Pathing cancelled");
+                                break;
+                            }
+                        }
+
+                        Kinematics.WaypointTracker(0, 2, 0);
+
+                        t = 0;
+
+                        Comms._uart.DiscardOutBuffer();
+
+                        while (t < 600)
+                        {
+                            Comms._uart.WriteByte(2);
+                            if (HW.myGamepad.GetConnectionStatus() == CTRE.Phoenix.UsbDeviceConnection.Connected)
+                            {
+                                CTRE.Phoenix.Watchdog.Feed();
+                            }
+                            Kinematics.SetModuleStatesAuto(0, -0.5f, 0);
+                            steer.Steer();
+                            Drive.Velocity();
+                            t = t + 1;
+                        }
+
+                        
+
                         Debug.Print("Pathing Complete!");
                         Debug.Print("Hold B to return to mode selection.");
 
                         while (true)
-                        {   /*Use B Button to Exit Auto Mode*/
+                        {
+                            Comms._uart.WriteByte(4);
+                            /*Use B Button to Exit Auto Mode*/
                             if (HW.myGamepad.GetButton(3) == true)
                             {
                                 Comms._uart.Close();

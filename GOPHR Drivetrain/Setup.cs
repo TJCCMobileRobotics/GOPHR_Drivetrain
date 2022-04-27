@@ -88,9 +88,9 @@ namespace GOPHR_Drivetrain
             configTalon02.primaryPID.selectedFeedbackSensor = FeedbackDevice.RemoteSensor0;
             configTalon02.slot_0.closedLoopPeakOutput = 0.5f;
             configTalon02.supplyCurrLimit.enable = true;
-            configTalon02.supplyCurrLimit.triggerThresholdCurrent = 20; // the peak supply current, in amps
+            configTalon02.supplyCurrLimit.triggerThresholdCurrent = 5; // the peak supply current, in amps
             configTalon02.supplyCurrLimit.triggerThresholdTime = 0.5f; // the time at the peak supply current before the limit triggers, in sec
-            configTalon02.supplyCurrLimit.currentLimit = 15;
+            configTalon02.supplyCurrLimit.currentLimit = 5;
             configTalon02.feedbackNotContinuous = false;
             configTalon02.neutralDeadband = 0.01f;
 
@@ -121,10 +121,10 @@ namespace GOPHR_Drivetrain
             configTalon01.slot_0.kD = 0.0f;
             configTalon01.slot_0.kF = 0.0f;
             configTalon01.supplyCurrLimit.enable = true;
-            configTalon01.supplyCurrLimit.triggerThresholdCurrent = 10; // the peak supply current, in amps
+            configTalon01.supplyCurrLimit.triggerThresholdCurrent = 5; // the peak supply current, in amps
             configTalon01.supplyCurrLimit.triggerThresholdTime = 0.5f; // the time at the peak supply current before the limit triggers, in sec
             configTalon01.slot_0.closedLoopPeakOutput = 1.0f;
-            configTalon01.supplyCurrLimit.currentLimit = 10;
+            configTalon01.supplyCurrLimit.currentLimit = 5;
             configTalon01.neutralDeadband = 0.01f;
             configTalon01.initializationStrategy = SensorInitializationStrategy.BootToZero;
             configTalon01.peakOutputForward = 1.0f;

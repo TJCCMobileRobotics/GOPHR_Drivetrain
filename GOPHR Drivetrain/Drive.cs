@@ -73,7 +73,7 @@ namespace GOPHR_Drivetrain
             }
             else if (distanceTraveled >= distanceTarget - rampDist)
             {
-                output = (float)(0.2 + (((distanceTarget - distanceTraveled) * 0.8) / rampDist));
+                //output = (float)(0.2 + (((distanceTarget - distanceTraveled) * 0.8) / rampDist));
                 output = (float)(0.2 + (((distanceTarget - distanceTraveled) * 0.8) / rampDist));
             }
             else

@@ -13,7 +13,7 @@ namespace GOPHR_Drivetrain
         /*Some variables for UART*/
         private static int byteRead;
         private static int bytesInBuffer;
-        private static int bytesOutBuffer;
+        //private static int bytesOutBuffer;
 
         /*Configure UART settings*/
         public static void UartSetup()
@@ -45,7 +45,7 @@ namespace GOPHR_Drivetrain
             while (true)
             {
                 bytesInBuffer = _uart.BytesToRead;
-                //Debug.Print("Bytes in Buffer: " + bytesInBuffer);
+                Debug.Print("Bytes in Buffer: " + bytesInBuffer);
 
                 if (bytesInBuffer > 0)
                 {
@@ -98,10 +98,10 @@ namespace GOPHR_Drivetrain
                 Debug.Print("Omega Rotation: " + Var.waypointArray[i * 3 + 2]);
                 i = i + 1;
             }
-            Debug.Print(Var.waypointArray.Length / 3 + "waypoints recieved"); 
+            Debug.Print(Var.waypointArray.Length / 3 + " waypoints received"); 
         }
 
-        public static void UartWriteOdom()
+        /*public static void UartWriteOdom()
         {
             int vxOdomWhole = (int)(System.Math.Truncate(Var.vxOdom));
             int vxOdomDecimals = (int)((Var.vxOdom - vxOdomWhole)*1000);
@@ -110,7 +110,7 @@ namespace GOPHR_Drivetrain
             int vOmegaOdomWhole = (int)(System.Math.Truncate(Var.vOmegaOdom));
             int vOmegaOdomDecimals = (int)((Var.vOmegaOdom - vOmegaOdomWhole)*1000);
 
-            /*declare byte variables and convert odom integers to 4 byte arrays*/
+            /*declare byte variables and convert odom integers to 4 byte arrays
             byte[] vxOdomWholeByte;
             byte[] vxOdomDecimalsByte;
             byte[] vyOdomWholeByte;
@@ -128,7 +128,7 @@ namespace GOPHR_Drivetrain
 
             Debug.Print("Test: " + vxOdomDecimals);
 
-            /*Concatenate odom byte arrays to one 24 byte array*/
+            /*Concatenate odom byte arrays to one 24 byte array
             byte[] odomBytesToWrite = new byte[24];
             vxOdomWholeByte.CopyTo(odomBytesToWrite, 0);
             vxOdomDecimalsByte.CopyTo(odomBytesToWrite, 4);
@@ -137,12 +137,12 @@ namespace GOPHR_Drivetrain
             vOmegaOdomWholeByte.CopyTo(odomBytesToWrite, 16);
             vOmegaOdomDecimalsByte.CopyTo(odomBytesToWrite, 20);
 
-            /*Write odom byte array to UART buffer*/
+            /*Write odom byte array to UART buffer
 
             bytesOutBuffer = _uart.BytesToWrite;
 
             Comms._uart.Write(odomBytesToWrite, 0, 24);
-        }
+        }*/
 
 
     }
