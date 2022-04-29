@@ -55,7 +55,7 @@ namespace GOPHR_Drivetrain
 
         }
 
-        readonly private static float rampDist = Config.FeetToTicks(1);
+        readonly private static float rampDist = Config.FeetToTicks(2);
 
         public static float Trapezoid(float distanceTarget, float distanceTraveled)
         {

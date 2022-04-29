@@ -53,12 +53,12 @@ namespace GOPHR_Drivetrain
 
                         if (HW.myGamepad.GetButton(7) == true && HW.myGamepad.GetButton(5) == true)
                         {
-                            Var.maxSpeed = 1600f * 8;
-                        }
-                        else if (HW.myGamepad.GetButton(7) == true)
-                        {
                             Var.maxSpeed = 1600f * 3;
                         }
+                        //else if (HW.myGamepad.GetButton(7) == true)
+                        //{
+                        //    Var.maxSpeed = 1600f * 3;
+                        //}
                         else
                         {
                             Var.maxSpeed = 1600f;
@@ -109,8 +109,9 @@ namespace GOPHR_Drivetrain
                     Comms.UartReadWaypoints();
 
                     /*Use this to hardcode waypoints:*/
-                    //float[]testArray = {3, 0, 0, 3, 3, 0};
-                    //Var.waypointArray = testArray;
+                    float[]testArray = {6.562f, 0, 0, 8.202f, -82.349f, 0, 10.499f, -82.349f, 0};
+                    float[] testArrayBack = {6.562f, 0, 180, 8.702f, -82.349f, 100, 10.499f, -82.349f, 0 };
+                    Var.waypointArray = testArray;
 
                     while (true)
                     {
@@ -185,6 +186,8 @@ namespace GOPHR_Drivetrain
                         i = i - 2;
 
                         Debug.Print("Returning home...");
+
+                        Var.waypointArray = testArrayBack;
 
                         while (i >= 0)
                         {
